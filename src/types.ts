@@ -23,6 +23,7 @@ export interface Settings {
   harvestAccountId: string;
   forecastAccountId: string;
   task?: string;
+  taskDescription?: string;
   billable: HourType;
   timeFormat?: TimeFormat;
   timePeriod?: TimePeriod;
