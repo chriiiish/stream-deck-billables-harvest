@@ -174,7 +174,8 @@ export const getTimeEntryForTask = async (
   settings: Settings,
   userId: number,
   projectId: number,
-  taskId: number
+  taskId: number,
+  taskNotes: string = ""
 ): Promise<TimeEntry> => {
   // Get tracked hours.
   const today = getTodaysDate();
@@ -186,9 +187,15 @@ export const getTimeEntryForTask = async (
     to: today,
   });
   if (typeof res.time_entries !== 'undefined' && res.time_entries.length) {
-    // Return the first one found.
-    // @todo Track this differently?
-    return res.time_entries.pop();
+    // If there are no task notes to filter, set to null to match Harvest
+    // (Harvest returns empty notes as null)
+    if(taskNotes === "")
+      taskNotes = null;
+
+    // Find where task notes match
+    let matchingTask: TimeEntry = res.time_entries.find(te => te.notes === taskNotes);
+    if (matchingTask !== null)
+      return matchingTask;
   }
 
   return null;

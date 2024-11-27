@@ -27,7 +27,7 @@ export const updateTimer = async (context: string, settings: Settings) => {
     const userId: number = await getHarvestUserId(settings);
     const task: { id: number; projectId: number } = JSON.parse(settings.task);
     if (typeof task !== 'undefined' && typeof task.id !== 'undefined' && task.id) {
-      const timeEntry = await getTimeEntryForTask(settings, userId, task.projectId, task.id);
+      const timeEntry = await getTimeEntryForTask(settings, userId, task.projectId, task.id, settings.taskNote);
       if (timeEntry) {
         displayTimerStatus(context, timeEntry.is_running, timeEntry.hours, settings.timeFormat);
       } else {
