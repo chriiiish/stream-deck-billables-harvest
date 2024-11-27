@@ -212,12 +212,17 @@ export const getTimeEntryForTask = async (
 export const createTimeEntry = async (
   settings: Settings,
   projectId: number,
-  taskId: number
+  taskId: number,
+  taskNote: string
 ): Promise<TimeEntry> => {
+  // Harvest likes to deal with empty notes as nulls
+  if (taskNote === "") taskNote = null;
+
   const newTimeEntry = await postHarvest(settings, 'time_entries', {
     project_id: projectId,
     task_id: taskId,
     spent_date: getTodaysDate(),
+    notes: taskNote
   });
   if (typeof newTimeEntry.id === 'undefined' || !newTimeEntry.id) {
     throw new Error('ETIM1: Error creating time entry.');
